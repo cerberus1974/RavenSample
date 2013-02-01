@@ -1,5 +1,6 @@
 ﻿using Raven.Client;
 using Raven.Client.Embedded;
+using Raven.Client.Linq;
 using RavenSample.Models;
 using System;
 using System.Collections.Generic;
@@ -16,7 +17,19 @@ namespace RavenSample.Controllers
 
         public ActionResult Index()
         {
-            return View();
+            IRavenQueryable<Comment> query = null;
+
+            using (IDocumentStore instance = new EmbeddableDocumentStore { DataDirectory = @"~\Database" })
+            {
+                instance.Initialize();
+
+                using (IDocumentSession session = instance.OpenSession())
+                {
+                    query = session.Query<Comment>();
+                }
+            }
+
+            return View(query.ToList());
         }
 
         public ActionResult Add()

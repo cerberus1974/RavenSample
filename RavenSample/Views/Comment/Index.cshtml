@@ -1,5 +1,16 @@
-﻿@{
+﻿@model IEnumerable<RavenSample.Models.Comment>
+
+@{
     ViewBag.Title = "Index";
 }
 
 <h2>Index</h2>
+
+@foreach (var comment in Model)
+{
+    <div>
+        @Html.Display( comment.Content ) 
+        @Html.Display( comment.Commenter )
+        @Html.Display( comment.CreateAt.ToString("yyyy/MM/dd HH:mm:ss") )
+    </div>
+}
